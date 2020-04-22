@@ -1,0 +1,37 @@
+html ,body{
+    margin:80;
+    height: 100%; 
+}
+.axe path{
+    stroke:brown;
+    stroke-width: 3px;
+    fill: none;
+}
+
+line{
+    stroke: brown;
+    stroke-width: 2px;
+}
+
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.focus circle {
+    fill: steelblue;
+}
+
+.focus text {
+    font-size: 14px;
+}
+
+.tooltip {
+    fill: white;
+    stroke: #000;
+}
+
+.tooltip-date, .tooltip-likes {
+    font-weight: bold;
+}
