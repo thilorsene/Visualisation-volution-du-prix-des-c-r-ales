@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Final Visualisation</title>
+
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/test.css" type="text/css" rel="stylesheet" />
+
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+    <!-- Load d3.js and the geo projection plugin -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3-scale-radial.js"></script>
+    
+<script>  document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('select');
+  var instances = M.FormSelect.init(elems, "");
+});</script>
+
+    </head>
+   
+</head>
+<body style="background-color:x;">
+  <nav class="navi">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo right">Final Visualisation</a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li><a href="index.html">Acceuil</a></li>
+        <li><a href="mil.html">Millet</a></li>
+        <li><a href="riz.html">Riz</a></li>
+        <li><a href="sorgho.html">Sorgho</a></li>
+        <li><a href="mais.html">Mais</a></li>
+        <li><a href="carte.html">Carte</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center teal-text text-lighten-2">Visualisation de Données</h1>
+        <div class="row center">
+          <h4 class="header col s12 light">Prix des cereales au Senegal entre 2000 et 2020</h4>
+        </div>
+  
+        <br><br>
+
+      </div>
+    </div>
+    <div class="parallax"><img src="senegal.jpg" alt="Unsplashed background img 1"></div>
+  </div>
+
+<div style="background-color: white;">
+  <div class="container">
+    <div class="section">
+     <p style="text-align: center;font-size: 30px; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" >Visualisation Detaillé en Bar Chart </p>
+    </div>
+  </div>
+
+</div>
+ 
+<div style="text-align: center;">
+  <svg width="805" height="800"></svg>
+</div>
+</body>
+
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Université de Thies M1 MSDA</h5>
+          <p class="grey-text text-lighten-4">L'excellence notre choix l'humilité notre voie</p>
+
+
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Github</h5>
+          <ul>
+            <li><a class="white-text" href="https://github.com/thilorsene/">Thilor</a></li>
+            <li><a class="white-text"href="https://github.com/MATHIAM29/">Mathiam</a></li>
+           
+          </ul>
+        </div>
+        
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Par <a class="brown-text text-lighten-3" href="https://github.com/thilorsene/">Mbaye Thilor Sene </a>
+     Et <a class="brown-text text-lighten-3" href="https://github.com/MATHIAM29/">Mathiam Faye</a>
+        
+    </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
+
+  <script>
+var region= sessionStorage.myvalue;
+
+console.log(region)
+charger(region)
+    function charger(region){ 
+
+  var margin = {top: 20, right: 200, bottom: 50, left: 40},
+      width = 1200 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+  
+  var x0 = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
+  
+  var x1 = d3.scale.ordinal();
+  
+  var y = d3.scale.linear()
+      .range([height, 0]);
+  
+  var xAxis = d3.svg.axis()
+      .scale(x0)
+      .tickSize(0)
+      .orient("bottom");
+  
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+  
+  var color = d3.scale.ordinal()
+      .range(["#ca0020","#f4a582","#d5d5d5","#92c5de","#0571b0"]);
+  
+  var svg = d3.select('svg')
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(30,0)");
+
+     
+  
+  d3.csv("test.csv", function(error, data) {
+  
+    data = data.filter(function(d){return d.admname == region;})
+    console.log(data)
+  
+  data2 = d3.nest().key(function(d) {return d.date}).entries(data);
+  
+  console.log(data2)
+  
+  
+
+    var dates = 
+    data.map(item => item.date)
+    .filter((value, index, self) => self.indexOf(value) === index);
+    var cat = data.map(item => item.cmname)
+    .filter((value, index, self) => self.indexOf(value) === index);
+  console.log(cat,dates)
+  
+    x0.domain(dates);
+    x1.domain(cat).rangeRoundBands([0, x0.rangeBand()]);
+    y.domain([0, d3.max(data2, function(key) { return d3.max(key.values, function(d) { return d.price; }); })]);
+  
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+  
+    svg.append("g")
+        .attr("class", "y axis")
+        .style('opacity','0')
+        .call(yAxis)
+    .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .style('font-weight','bold')
+        .text("Prix");
+  
+
+        var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([0, 0])
+  .html(function(d) {
+    return "<strong>" + d.cmname + "<br> " + parseInt(d.price) + "</strong><span style='color:#fff'>"+ " FCFA</span>";
+  });
+
+    svg.select('.y').transition().duration(500).delay(1300).style('opacity','1');
+  
+    var slice = svg.selectAll(".slice")
+        .data(data2)
+        .enter().append("g")
+        .attr("class", "g")
+        .attr("transform",function(d) { return "translate(" + x0(d.key) + ",0)"; });
+  
+    slice.selectAll("rect")
+        .data(function(d) { return d.values; })
+    .enter().append("rect")
+        .attr("width", x1.rangeBand())
+        .attr("x", function(d) { return x1(d.cmname); })
+        .style("fill", function(d) { return color(d.cmname) })
+        .attr("y", function(d) { return y(0); })
+        .attr("height", function(d) { return height - y(0); })
+        .on("mouseover", function(d) {
+            tip.show(d);
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).style("fill", color(d.cmname));
+            tip.hide();
+        });
+  
+    slice.selectAll("rect")
+        .transition()
+        .delay(function (d) {return Math.random()*1000;})
+        .duration(1000)
+        .attr("y", function(d) { return y(d.price); })
+        .attr("height", function(d) { return height - y(d.price); });
+  
+    svg.append("text").attr("x", 460).attr("y", 480).text("Projection sur la region de "+region).style("font-size", "15px").attr("alignment-baseline","middle")
+
+
+  svg.call(tip);
+
+
+
+    //Legend
+    var legend = svg.selectAll(".legend")
+        .data(data2[0].values.map(function(d) { return d.cmname; }).reverse())
+    .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
+        .style("opacity","0");
+  
+    legend.append("rect")
+        .attr("x", 1100)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", function(d) { return color(d); });
+  
+    legend.append("text")
+        .attr("x", 1090)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) {return d; });
+  
+    legend.transition().duration(500).delay(function(d,i){ return 1300 + 100 * i; }).style("opacity","1");
+  
+  });
+
+}
+
+ 
+
+  </script>
+  </body>
+</html>
