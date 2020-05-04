@@ -42,7 +42,7 @@ d3.csv('data/Riz.csv')
                         .y(function(d){return y(d.prix); });
 
         chart.append('path').attr('fill', 'none')
-        .attr('stroke', 'steelblue')
+        .attr('stroke', 'red')
         .attr('stroke-linejoin', 'round')
         .attr('stroke-linecap', 'round')
         .attr('stroke-width', 3)
